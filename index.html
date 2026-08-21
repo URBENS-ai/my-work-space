@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人工作台</title>
+<style>
+  :root {
+    --bg: #faf6ef;
+    --card: #fffdf9;
+    --border: #ece2d4;
+    --text: #43362a;
+    --text-muted: #8c7c6c;
+    --brand: #e08a4e;
+    --brand-soft: #fceeda;
+    --high: #d9554a;
+    --high-soft: #fbe9e6;
+    --medium: #e0a13a;
+    --medium-soft: #fbf0da;
+    --low: #b3a48f;
+    --low-soft: #f3ede3;
+    --event: #e08a4e;
+    --todo: #8aa46a;
+    --radius: 14px;
+    --shadow: 0 1px 3px rgba(67, 54, 42, .07), 0 1px 2px rgba(67, 54, 42, .05);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+      "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 0;
+    line-height: 1.5;
+  }
+
+  /* ---------- 顶栏 ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; }
+  .logo .dot { width: 30px; height: 30px; border-radius: 8px; background: var(--brand); display: grid; place-items: center; font-size: 16px; }
+  .topbar-actions { display: flex; gap: 10px; }
+
+  /* ---------- 按钮 ---------- */
+  .btn {
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 9px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: .15s;
+  }
+  .btn:hover { background: #f7f1e8; }
+  .btn-primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .btn-primary:hover { background: #d07a3e; }
+  .btn-danger { background: var(--high); border-color: var(--high); color: #fff; }
+  .btn-danger:hover { background: #c94a40; }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+
+  /* ---------- 主体三栏 ---------- */
+  .layout {
+    display: grid;
+    grid-template-columns: 3fr 4fr 3fr; /* 左30% : 中40% : 右30% */
+    gap: 18px;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px 32px;
+    align-items: start;
+  }
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-head h2 { font-size: 15px; font-weight: 700; }
+  .card-body { padding: 16px 18px; }
+
+  /* ---------- 待办 ---------- */
+  .todo-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .todo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .todo .check {
+    width: 18px; height: 18px; border-radius: 6px;
+    border: 2px solid var(--low); flex-shrink: 0; cursor: pointer;
+    display: grid; place-items: center; font-size: 12px; line-height: 1;
+  }
+  .todo.done { opacity: .55; }
+  .todo.done .title { text-decoration: line-through; }
+  .todo .title { flex: 1; font-size: 14px; cursor: pointer; }
+  .todo .due { font-size: 12px; color: var(--text-muted); }
+  .tag {
+    font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 600; flex-shrink: 0;
+  }
+  .tag.high { background: var(--high-soft); color: var(--high); }
+  .tag.medium { background: var(--medium-soft); color: #a9710f; }
+  .tag.low { background: var(--low-soft); color: #6b5d4f; }
+
+  /* ---------- 月历 ---------- */
+  .cal-nav { display: flex; align-items: center; gap: 8px; }
+  .cal-title { font-size: 14px; font-weight: 600; min-width: 110px; text-align: center; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .cal-weekday {
+    text-align: center; font-size: 12px; color: var(--text-muted);
+    padding: 6px 0; font-weight: 600;
+  }
+  .cal-cell {
+    min-height: 82px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 6px 7px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: .12s;
+    position: relative;
+  }
+  .cal-cell:hover { border-color: var(--brand); }
+  .cal-cell.other { background: #fbf7f0; color: #cfc4b2; }
+  .cal-cell.today { border-color: var(--brand); box-shadow: inset 0 0 0 1px var(--brand); }
+  .cal-cell .num { font-weight: 600; margin-bottom: 4px; }
+  .cal-cell.today .num { color: var(--brand); }
+  .marker {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 10px; margin-top: 3px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    cursor: pointer;
+  }
+  .marker::before { content: ""; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .marker.event::before { background: var(--event); }
+  .marker.todo::before { background: var(--todo); }
+  .cal-legend { display: flex; gap: 14px; margin-top: 12px; font-size: 12px; color: var(--text-muted); }
+
+  /* ---------- 常用工具 ---------- */
+  .tool-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .tool {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 14px 6px; border: 1px solid var(--border); border-radius: 10px;
+    cursor: pointer; transition: .15s; text-align: center; position: relative;
+  }
+  .tool:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .tool .emoji { font-size: 24px; font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif; }
+  .tool .name { font-size: 12px; color: var(--text); }
+  .tool-edit {
+    position: absolute; top: 6px; right: 6px;
+    border: none; background: none; cursor: pointer;
+    font-size: 14px; color: var(--text-muted); opacity: 0;
+    transition: .15s; padding: 2px 4px; border-radius: 6px;
+  }
+  .tool:hover .tool-edit { opacity: 1; }
+  .tool-edit:hover { color: var(--brand); background: var(--brand-soft); }
+
+  /* ---------- 弹窗 ---------- */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(67, 54, 42, .45);
+    display: none; align-items: center; justify-content: center; z-index: 50;
+  }
+  .overlay.open { display: flex; }
+  .modal {
+    width: 400px; max-width: calc(100vw - 32px);
+    background: #fffdf9; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 20px 40px rgba(67, 54, 42, .22);
+  }
+  .modal-head {
+    padding: 18px 20px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .modal-head h3 { font-size: 16px; font-weight: 700; }
+  .modal-close { border: none; background: none; font-size: 20px; cursor: pointer; color: var(--text-muted); }
+  .modal-body { padding: 20px; }
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 9px 11px; border: 1px solid var(--border);
+    border-radius: 8px; font-size: 14px; font-family: inherit;
+  }
+  .field textarea { resize: vertical; min-height: 70px; }
+  .row { display: flex; gap: 12px; }
+  .row .field { flex: 1; }
+  .modal-foot { padding: 16px 20px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border); }
+  .hint { font-size: 12px; color: var(--text-muted); }
+  .emoji-panel { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+  .emoji-opt {
+    font-size: 20px; cursor: pointer; padding: 4px 6px; border-radius: 6px;
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+  }
+  .emoji-opt:hover { background: var(--brand-soft); }
+</style>
+</head>
+<body>
+
+  <!-- 顶栏 -->
+  <header class="topbar">
+    <div class="logo"><span class="dot">📊</span>个人工作台</div>
+    <div class="topbar-actions">
+      <button class="btn" onclick="exportJSON()">⬇ 导出备份</button>
+      <button class="btn" onclick="importJSON()">⬆ 导入备份</button>
+    </div>
+  </header>
+
+  <!-- 主体三栏 -->
+  <main class="layout">
+
+    <!-- 待办清单 -->
+    <section class="card">
+      <div class="card-head">
+        <h2>待办清单</h2>
+        <button class="btn btn-primary btn-sm" onclick="openModal('todo')">＋ 新增待办</button>
+      </div>
+      <div class="card-body">
+        <ul class="todo-list" id="todoList"></ul>
+      </div>
+    </section>
+
+    <!-- 月历视图 -->
+    <section class="card">
+      <div class="card-head">
+        <h2>月历</h2>
+        <div class="cal-nav">
+          <button class="btn btn-sm" onclick="changeMonth(-1)">‹</button>
+          <span class="cal-title" id="calTitle"></span>
+          <button class="btn btn-sm" onclick="changeMonth(1)">›</button>
+          <button class="btn btn-sm" onclick="changeMonth(0)">今天</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-legend">
+          <span class="marker event">日程</span>
+          <span class="marker todo">待办截止</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 常用工具 -->
+    <section class="card">
+      <div class="card-head">
+        <h2>常用工具</h2>
+        <button class="btn btn-primary btn-sm" onclick="openModal('link')">＋ 新增工具</button>
+      </div>
+      <div class="card-body">
+        <div class="tool-grid" id="toolGrid"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 弹窗 -->
+  <div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 id="modalTitle">标题</h3>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-foot">
+        <button class="btn btn-danger" id="modalDelete" onclick="deleteCurrent()" style="display:none">删除</button>
+        <span style="flex:1"></span>
+        <button class="btn" onclick="closeModal()">取消</button>
+        <button class="btn btn-primary" onclick="saveModal()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 导入用隐藏文件选择 -->
+  <input type="file" id="importFile" accept=".json,application/json" style="display:none" onchange="handleImportFile(event)">
+
+<script>
+  // ===== 数据层 =====
+  const STORAGE_KEY = 'workbench.data.v1';
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  function genId() {
+    if (window.crypto && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+    return 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
+  }
+
+  function dateStr(offsetDays) {
+    const d = new Date();
+    d.setDate(d.getDate() + offsetDays);
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  }
+
+  function seedData() {
+    return {
+      version: 1,
+      todos: [
+        { id: genId(), title: '更新作品集', priority: 'high', dueDate: dateStr(0), done: false, createdAt: Date.now() },
+        { id: genId(), title: '报税材料整理', priority: 'high', dueDate: dateStr(3), done: false, createdAt: Date.now() },
+        { id: genId(), title: '回复客户邮件', priority: 'medium', dueDate: null, done: false, createdAt: Date.now() },
+        { id: genId(), title: '整理发票', priority: 'low', dueDate: dateStr(-7), done: true, createdAt: Date.now() },
+      ],
+      events: [
+        { id: genId(), title: '客户会议', date: dateStr(-14), time: null, note: null, createdAt: Date.now() },
+        { id: genId(), title: '发票整理', date: dateStr(-7), time: null, note: null, createdAt: Date.now() },
+        { id: genId(), title: '设计评审', date: dateStr(0), time: null, note: null, createdAt: Date.now() },
+      ],
+      links: [
+        { id: genId(), emoji: '📧', name: 'Gmail', url: 'https://mail.google.com', createdAt: Date.now() },
+        { id: genId(), emoji: '📅', name: '日历', url: 'https://calendar.google.com', createdAt: Date.now() },
+        { id: genId(), emoji: '🎨', name: 'Figma', url: 'https://www.figma.com', createdAt: Date.now() },
+        { id: genId(), emoji: '📝', name: 'Notion', url: 'https://www.notion.so', createdAt: Date.now() },
+        { id: genId(), emoji: '📦', name: '网盘', url: 'https://www.dropbox.com', createdAt: Date.now() },
+        { id: genId(), emoji: '💼', name: '作品集', url: 'https://www.behance.net', createdAt: Date.now() },
+      ],
+    };
+  }
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      if (!data || !Array.isArray(data.todos) || !Array.isArray(data.events) || !Array.isArray(data.links)) return null;
+      return data;
+    } catch (e) { return null; }
+  }
+
+  function save() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  let state = load();
+  if (!state) { state = seedData(); save(); }
+
+  // ===== 通用工具 =====
+  const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 };
+  const PRIORITY_LABEL = { high: '高', medium: '中', low: '低' };
+  const WEEKDAYS = ['一', '二', '三', '四', '五', '六', '日'];
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function formatDateShort(dateStrVal) {
+    const parts = String(dateStrVal).split('-');
+    return parseInt(parts[1], 10) + '/' + parseInt(parts[2], 10);
+  }
+
+  function isValidUrl(url) {
+    try {
+      const u = new URL(/^https?:\/\//i.test(url) ? url : 'https://' + url);
+      return u.protocol === 'http:' || u.protocol === 'https:';
+    } catch (e) { return false; }
+  }
+
+  // ===== 待办清单 =====
+  function renderTodos() {
+    const list = document.getElementById('todoList');
+    const sorted = [...state.todos].sort((a, b) => {
+      if (a.done !== b.done) return a.done ? 1 : -1;
+      const pa = PRIORITY_ORDER[a.priority] ?? 2, pb = PRIORITY_ORDER[b.priority] ?? 2;
+      if (pa !== pb) return pa - pb;
+      return (a.createdAt || 0) - (b.createdAt || 0);
+    });
+
+    if (!sorted.length) {
+      list.innerHTML = '<div class="hint" style="padding:8px 0">暂无待办，点击「新增待办」开始</div>';
+      return;
+    }
+    list.innerHTML = '';
+    sorted.forEach(t => {
+      const li = document.createElement('li');
+      li.className = 'todo' + (t.done ? ' done' : '');
+      const check = document.createElement('span');
+      check.className = 'check';
+      check.textContent = t.done ? '✓' : '';
+      const title = document.createElement('span');
+      title.className = 'title';
+      title.textContent = t.title;
+      const tag = document.createElement('span');
+      tag.className = 'tag ' + (t.priority || 'low');
+      tag.textContent = PRIORITY_LABEL[t.priority] || '低';
+      const due = document.createElement('span');
+      due.className = 'due';
+      due.textContent = t.dueDate ? formatDateShort(t.dueDate) : '';
+
+      check.addEventListener('click', e => { e.stopPropagation(); toggleTodo(t.id); });
+      title.addEventListener('click', () => openModal('todo', t.id));
+
+      li.appendChild(check);
+      li.appendChild(title);
+      li.appendChild(tag);
+      li.appendChild(due);
+      list.appendChild(li);
+    });
+  }
+
+  function toggleTodo(id) {
+    const t = state.todos.find(x => x.id === id);
+    if (t) { t.done = !t.done; save(); renderAll(); }
+  }
+
+  // ===== 月历 =====
+  function renderCalendar() {
+    const title = document.getElementById('calTitle');
+    title.textContent = viewYear + '年' + (viewMonth + 1) + '月';
+
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+    WEEKDAYS.forEach(d => {
+      const w = document.createElement('div');
+      w.className = 'cal-weekday';
+      w.textContent = d;
+      grid.appendChild(w);
+    });
+
+    const first = new Date(viewYear, viewMonth, 1);
+    const startOffset = (first.getDay() + 6) % 7; // 周一起始
+    const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+    const prevDays = new Date(viewYear, viewMonth, 0).getDate();
+
+    const today = new Date();
+    const isThisMonth = today.getFullYear() === viewYear && today.getMonth() === viewMonth;
+
+    for (let i = startOffset - 1; i >= 0; i--) {
+      grid.appendChild(makeCell(prevDays - i, 'other'));
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const ds = viewYear + '-' + pad(viewMonth + 1) + '-' + pad(d);
+      const cell = makeCell(d, '');
+      if (isThisMonth && d === today.getDate()) cell.classList.add('today');
+
+      state.events.filter(e => e.date === ds).forEach(e => {
+        const m = document.createElement('div');
+        m.className = 'marker event';
+        m.textContent = e.title;
+        m.addEventListener('click', ev => { ev.stopPropagation(); openModal('event', e.id); });
+        cell.appendChild(m);
+      });
+      state.todos.filter(t => t.dueDate === ds).forEach(t => {
+        const m = document.createElement('div');
+        m.className = 'marker todo';
+        m.textContent = t.title;
+        m.addEventListener('click', ev => { ev.stopPropagation(); openModal('todo', t.id); });
+        cell.appendChild(m);
+      });
+
+      cell.addEventListener('click', () => openModal('event', null, ds));
+      grid.appendChild(cell);
+    }
+
+    const total = startOffset + daysInMonth;
+    const next = (7 - total % 7) % 7;
+    for (let d = 1; d <= next; d++) {
+      grid.appendChild(makeCell(d, 'other'));
+    }
+  }
+
+  function makeCell(day, cls) {
+    const cell = document.createElement('div');
+    cell.className = 'cal-cell ' + cls;
+    const num = document.createElement('div');
+    num.className = 'num';
+    num.textContent = day;
+    cell.appendChild(num);
+    return cell;
+  }
+
+  function changeMonth(delta) {
+    if (delta === 0) { initView(); }
+    else {
+      viewMonth += delta;
+      if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+      if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+    }
+    renderCalendar();
+  }
+
+  // ===== 常用工具 =====
+  function renderLinks() {
+    const grid = document.getElementById('toolGrid');
+    if (!state.links.length) {
+      grid.innerHTML = '<div class="hint" style="grid-column:1/-1;text-align:center;padding:8px 0">暂无工具，点击「新增工具」开始</div>';
+      return;
+    }
+    grid.innerHTML = '';
+    state.links.forEach(l => {
+      const div = document.createElement('div');
+      div.className = 'tool';
+      div.title = l.url || '';
+      const emoji = document.createElement('span');
+      emoji.className = 'emoji';
+      emoji.textContent = l.emoji || '🔗';
+      const name = document.createElement('span');
+      name.className = 'name';
+      name.textContent = l.name;
+      const edit = document.createElement('button');
+      edit.className = 'tool-edit';
+      edit.textContent = '✎';
+      edit.title = '编辑';
+      edit.addEventListener('click', e => { e.stopPropagation(); openModal('link', l.id); });
+
+      div.appendChild(emoji);
+      div.appendChild(name);
+      div.appendChild(edit);
+      div.addEventListener('click', () => openLink(l.url));
+      grid.appendChild(div);
+    });
+  }
+
+  function openLink(url) {
+    let href = (url || '').trim();
+    if (!href) return;
+    if (!/^https?:\/\//i.test(href)) href = 'https://' + href;
+    window.open(href, '_blank', 'noopener');
+  }
+
+  // ===== 弹窗 =====
+  let currentEdit = null;
+
+  function openModal(type, id, dateVal) {
+    currentEdit = { type, id: id || null, date: dateVal || null };
+    const titleEl = document.getElementById('modalTitle');
+    const body = document.getElementById('modalBody');
+    const delBtn = document.getElementById('modalDelete');
+
+    if (type === 'todo') {
+      const t = id ? state.todos.find(x => x.id === id) : null;
+      titleEl.textContent = t ? '编辑待办' : '新增待办';
+      body.innerHTML = `
+        <div class="field"><label>标题</label><input id="f-title" placeholder="要做什么？" value="${t ? escapeHtml(t.title) : ''}"></div>
+        <div class="row">
+          <div class="field">
+            <label>优先级</label>
+            <select id="f-priority">
+              <option value="high">高</option>
+              <option value="medium">中</option>
+              <option value="low">低</option>
+            </select>
+          </div>
+          <div class="field"><label>截止日期</label><input id="f-due" type="date" value="${t && t.dueDate ? t.dueDate : ''}"></div>
+        </div>`;
+      if (t) document.getElementById('f-priority').value = t.priority;
+    } else if (type === 'link') {
+      const l = id ? state.links.find(x => x.id === id) : null;
+      titleEl.textContent = l ? '编辑工具' : '新增工具';
+      body.innerHTML = `
+        <div class="field">
+          <label>Emoji 图标</label>
+          <input id="f-emoji" placeholder="如 📧" value="${l ? escapeHtml(l.emoji) : ''}">
+          <div class="emoji-panel">
+            <span class="emoji-opt" onclick="pickEmoji(this)">📧</span>
+            <span class="emoji-opt" onclick="pickEmoji(this)">📅</span>
+            <span class="emoji-opt" onclick="pickEmoji(this)">📝</span>
+            <span class="emoji-opt" onclick="pickEmoji(this)">🎨</span>
+            <span class="emoji-opt" onclick="pickEmoji(this)">💰</span>
+            <span class="emoji-opt" onclick="pickEmoji(this)">📦</span>
+            <span class="emoji-opt" onclick="pickEmoji(this)">💼</span>
+            <span class="emoji-opt" onclick="pickEmoji(this)">🔗</span>
+            <span class="emoji-opt" onclick="pickEmoji(this)">📚</span>
+            <span class="emoji-opt" onclick="pickEmoji(this)">☁️</span>
+            <span class="emoji-opt" onclick="pickEmoji(this)">🗂️</span>
+            <span class="emoji-opt" onclick="pickEmoji(this)">📈</span>
+            <span class="emoji-opt" onclick="pickEmoji(this)">⚙️</span>
+            <span class="emoji-opt" onclick="pickEmoji(this)">🖥️</span>
+          </div>
+        </div>
+        <div class="field"><label>名称</label><input id="f-name" placeholder="如 Gmail" value="${l ? escapeHtml(l.name) : ''}"></div>
+        <div class="field"><label>网址</label><input id="f-url" placeholder="https://..." value="${l ? escapeHtml(l.url) : ''}"></div>`;
+    } else if (type === 'event') {
+      const ev = id ? state.events.find(x => x.id === id) : null;
+      const dval = ev ? ev.date : (dateVal || dateStr(0));
+      titleEl.textContent = ev ? '编辑日程' : '新增日程';
+      body.innerHTML = `
+        <div class="field"><label>标题</label><input id="f-title" placeholder="日程内容" value="${ev ? escapeHtml(ev.title) : ''}"></div>
+        <div class="row">
+          <div class="field"><label>时间</label><input id="f-time" type="time" value="${ev && ev.time ? ev.time : ''}"></div>
+          <div class="field"><label>日期</label><input id="f-date" type="date" value="${dval}"></div>
+        </div>
+        <div class="field"><label>备注</label><textarea id="f-note" placeholder="选填">${ev && ev.note ? escapeHtml(ev.note) : ''}</textarea></div>`;
+    }
+
+    delBtn.style.display = id ? 'inline-block' : 'none';
+    document.getElementById('overlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('overlay').classList.remove('open');
+    currentEdit = null;
+  }
+
+  function saveModal() {
+    if (!currentEdit) return;
+    const type = currentEdit.type;
+    const id = currentEdit.id;
+
+    if (type === 'todo') {
+      const title = document.getElementById('f-title').value.trim();
+      if (!title) { alert('标题不能为空'); return; }
+      const priority = document.getElementById('f-priority').value;
+      const due = document.getElementById('f-due').value || null;
+      if (id) {
+        const t = state.todos.find(x => x.id === id);
+        if (t) { t.title = title; t.priority = priority; t.dueDate = due; }
+      } else {
+        state.todos.push({ id: genId(), title, priority, dueDate: due, done: false, createdAt: Date.now() });
+      }
+    } else if (type === 'link') {
+      const emoji = document.getElementById('f-emoji').value.trim();
+      const name = document.getElementById('f-name').value.trim();
+      const url = document.getElementById('f-url').value.trim();
+      if (!name) { alert('名称不能为空'); return; }
+      if (!isValidUrl(url)) { alert('请输入合法网址'); return; }
+      if (id) {
+        const l = state.links.find(x => x.id === id);
+        if (l) { l.emoji = emoji || '🔗'; l.name = name; l.url = url; }
+      } else {
+        state.links.push({ id: genId(), emoji: emoji || '🔗', name, url, createdAt: Date.now() });
+      }
+    } else if (type === 'event') {
+      const title = document.getElementById('f-title').value.trim();
+      if (!title) { alert('标题不能为空'); return; }
+      const date = document.getElementById('f-date').value || dateStr(0);
+      const time = document.getElementById('f-time').value || null;
+      const note = document.getElementById('f-note').value.trim() || null;
+      if (id) {
+        const ev = state.events.find(x => x.id === id);
+        if (ev) { ev.title = title; ev.date = date; ev.time = time; ev.note = note; }
+      } else {
+        state.events.push({ id: genId(), title, date, time, note, createdAt: Date.now() });
+      }
+    }
+
+    save();
+    renderAll();
+    closeModal();
+  }
+
+  function deleteCurrent() {
+    if (currentEdit && currentEdit.id) confirmDelete(currentEdit.type, currentEdit.id);
+  }
+
+  function confirmDelete(type, id) {
+    if (!confirm('确定删除该条记录吗？此操作不可恢复。')) return;
+    if (type === 'todo') state.todos = state.todos.filter(x => x.id !== id);
+    else if (type === 'link') state.links = state.links.filter(x => x.id !== id);
+    else if (type === 'event') state.events = state.events.filter(x => x.id !== id);
+    save();
+    renderAll();
+    closeModal();
+  }
+
+  function pickEmoji(el) {
+    const inp = el.closest('.field').querySelector('input');
+    if (inp) inp.value = el.textContent.trim();
+  }
+
+  // ===== 备份 =====
+  function exportJSON() {
+    const data = JSON.stringify(state, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const now = new Date();
+    const stamp = now.getFullYear() + pad(now.getMonth() + 1) + pad(now.getDate());
+    a.href = url;
+    a.download = 'workbench-backup-' + stamp + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function importJSON() {
+    document.getElementById('importFile').click();
+  }
+
+  function handleImportFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        if (!data || !Array.isArray(data.todos) || !Array.isArray(data.events) || !Array.isArray(data.links)) {
+          alert('文件格式不正确，导入已取消');
+          return;
+        }
+        if (!confirm('导入将覆盖当前所有数据，确定继续吗？')) return;
+        data.version = 1;
+        state = data;
+        save();
+        renderAll();
+      } catch (err) {
+        alert('文件解析失败，导入已取消');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  }
+
+  // ===== 月历视图状态 =====
+  let viewYear, viewMonth;
+  function initView() {
+    const now = new Date();
+    viewYear = now.getFullYear();
+    viewMonth = now.getMonth();
+  }
+
+  function renderAll() {
+    renderTodos();
+    renderCalendar();
+    renderLinks();
+  }
+
+  // 初始化
+  initView();
+  renderAll();
+</script>
+</body>
+</html>
