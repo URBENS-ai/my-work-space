@@ -1,0 +1,2334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>冯敬 · 个人简历 (Resume)</title>
+  <style>
+    /* ==========================================================================
+       1. CSS Reset & Design Tokens
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      /* Base Colors */
+      --color-bg: #F8F9FA;
+      --color-surface: #FFFFFF;
+      --color-primary: #2FA8A8;
+      --color-primary-hover: #238888;
+      --color-primary-soft: #E8F6F6;
+      --color-primary-softer: #F2FAFA;
+      --color-accent: #FF6B4A;
+      --color-accent-soft: #FFF0ED;
+      --color-text-strong: #182222;
+      --color-text-main: #3A4545;
+      --color-text-muted: #708080;
+      --color-text-faint: #A0B0B0;
+      --color-border: #E3ECEC;
+      --color-border-hover: #B8DCDC;
+
+      /* Radius */
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --radius-full: 9999px;
+
+      /* Shadows */
+      --shadow-subtle: 0 1px 3px rgba(16, 35, 35, 0.04), 0 4px 12px rgba(16, 35, 35, 0.03);
+      --shadow-hover: 0 8px 24px rgba(16, 35, 35, 0.08), 0 2px 6px rgba(16, 35, 35, 0.04);
+      
+      /* Typography */
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      background-color: var(--color-bg);
+      color: var(--color-text-main);
+      font-family: var(--font-family);
+    }
+
+    body {
+      background-color: var(--color-bg);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      padding-top: 76px;
+    }
+
+    .fade-in-init {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: pageEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes pageEntrance {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-on-scroll.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ==========================================================================
+       2. 通用容器与排版组件
+       ========================================================================== */
+    .container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 56px 0;
+      position: relative;
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .section-tag {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--color-primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-tag::before {
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: var(--color-primary);
+      border-radius: 50%;
+    }
+
+    .section-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--color-text-strong);
+      line-height: 1.3;
+    }
+
+    .section-subtitle {
+      font-size: 15px;
+      color: var(--color-text-muted);
+    }
+
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-subtle);
+      transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--color-border-hover);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--color-primary-soft);
+      color: var(--color-primary);
+      white-space: nowrap;
+    }
+
+    .chip-accent {
+      background: var(--color-accent-soft);
+      color: var(--color-accent);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: var(--radius-full);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(47, 168, 168, 0.3);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(47, 168, 168, 0.4);
+    }
+
+    .btn-secondary {
+      background-color: #FFFFFF;
+      color: var(--color-text-strong);
+      border-color: var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--color-primary-soft);
+      border-color: var(--color-border-hover);
+      color: var(--color-primary);
+    }
+
+    /* ==========================================================================
+       3. 岗位视角切换栏 & 顶部导航
+       ========================================================================== */
+    .role-switch-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--color-primary-softer);
+      padding: 6px 10px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--color-border);
+    }
+
+    .role-switch-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      margin-left: 6px;
+    }
+
+    .role-switch-tabs {
+      display: flex;
+      gap: 4px;
+      background: #FFFFFF;
+      padding: 3px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--color-border);
+    }
+
+    .role-tab-btn {
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: transparent;
+      color: var(--color-text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .role-tab-btn.active {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: 0 2px 6px rgba(47, 168, 168, 0.35);
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
+      background: rgba(248, 249, 250, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(227, 236, 236, 0.8);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--color-text-strong);
+      text-decoration: none;
+    }
+
+    .brand-avatar-mini {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-primary), #1a7070);
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--color-primary);
+      background-color: var(--color-primary-soft);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      color: var(--color-text-strong);
+    }
+
+    /* ==========================================================================
+       4. 板块 1：Hero 区
+       ========================================================================== */
+    .hero-section {
+      padding: 36px 0 54px 0;
+    }
+
+    .hero-topbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 18px;
+    }
+
+    .btn-download-pdf {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: var(--radius-full);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      color: #FFFFFF;
+      background: linear-gradient(135deg, var(--color-accent), #FF8A6B);
+      box-shadow: 0 6px 18px rgba(255, 107, 74, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-download-pdf:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(255, 107, 74, 0.45);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.22fr 0.78fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .hero-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .hero-name {
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--color-text-strong);
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+    }
+
+    .hero-headline {
+      font-size: 17.5px;
+      font-weight: 600;
+      color: var(--color-primary);
+      line-height: 1.5;
+      min-height: 52px;
+      transition: color 0.3s ease;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      color: var(--color-text-main);
+      line-height: 1.7;
+      min-height: 75px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero-card-right {
+      background: linear-gradient(145deg, #FFFFFF, var(--color-primary-soft));
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .hero-avatar-wrap {
+      width: 108px;
+      height: 108px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-primary), #1a6060);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-size: 38px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      box-shadow: 0 8px 24px rgba(47, 168, 168, 0.25);
+      border: 4px solid #FFFFFF;
+    }
+
+    .hero-stat-box {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--color-border);
+      padding: 8px;
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+
+    .stat-pill-num {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-primary);
+      display: block;
+    }
+
+    .stat-pill-lbl {
+      font-size: 11px;
+      color: var(--color-text-muted);
+    }
+
+    /* 空间站二维码容器 */
+    .hero-qrcode-box {
+      width: 100%;
+      background: #FFFFFF;
+      border: 1px dashed var(--color-border-hover);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .hero-qrcode-img {
+      width: 105px;
+      height: 105px;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .hero-qrcode-tip {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+    }
+
+    /* ==========================================================================
+       5. 板块 2：关于我
+       ========================================================================== */
+    .about-card {
+      max-width: 860px;
+      margin: 0 auto;
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      padding: 36px 40px;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .about-para {
+      font-size: 15.5px;
+      line-height: 1.8;
+      color: var(--color-text-main);
+      margin-bottom: 18px;
+    }
+
+    .about-para:last-of-type {
+      margin-bottom: 24px;
+    }
+
+    .highlight-text {
+      font-weight: 700;
+      color: var(--color-text-strong);
+      background: linear-gradient(120deg, rgba(47, 168, 168, 0.15) 0%, rgba(47, 168, 168, 0.15) 100%);
+      background-repeat: no-repeat;
+      background-size: 100% 35%;
+      background-position: 0 88%;
+      padding: 0 4px;
+    }
+
+    .about-traits-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      padding-top: 20px;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .trait-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+      padding: 12px 8px;
+      background: var(--color-bg);
+      border-radius: var(--radius-md);
+    }
+
+    .trait-icon {
+      font-size: 20px;
+    }
+
+    .trait-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--color-text-strong);
+    }
+
+    /* ==========================================================================
+       6. 板块 3：作品和项目
+       ========================================================================== */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 0;
+      position: relative;
+    }
+
+    .project-visual-preview {
+      height: 180px;
+      background-color: var(--color-primary-soft);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid var(--color-border);
+      text-decoration: none;
+    }
+
+    .preview-phone-mockup {
+      width: 150px;
+      height: 160px;
+      background: #FFFFFF;
+      border-radius: 12px 12px 0 0;
+      border: 3px solid #3A4545;
+      border-bottom: none;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transform: translateY(12px);
+      transition: transform 0.3s ease;
+    }
+
+    .project-card:hover .preview-phone-mockup {
+      transform: translateY(4px);
+    }
+
+    .mockup-header {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--color-accent);
+      border-bottom: 1px dashed var(--color-border);
+      padding-bottom: 3px;
+    }
+
+    .mockup-item {
+      font-size: 8px;
+      line-height: 1.3;
+      color: var(--color-text-main);
+      background: var(--color-bg);
+      padding: 4px;
+      border-radius: 4px;
+    }
+
+    .preview-dashboard-mockup {
+      width: 85%;
+      height: 140px;
+      background: #FFFFFF;
+      border-radius: 10px;
+      border: 1px solid var(--color-border);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transform: translateY(10px);
+      transition: transform 0.3s ease;
+    }
+
+    .project-card:hover .preview-dashboard-mockup {
+      transform: translateY(4px);
+    }
+
+    .mockup-dash-bar {
+      height: 7px;
+      background: var(--color-primary);
+      border-radius: 4px;
+      width: 40%;
+    }
+
+    .mockup-dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .mockup-dash-stat {
+      background: var(--color-primary-softer);
+      padding: 4px 5px;
+      border-radius: 6px;
+      font-size: 8.5px;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .preview-code-mockup {
+      width: 85%;
+      height: 140px;
+      background: #182222;
+      border-radius: 10px;
+      border: 1px solid #334444;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      transform: translateY(10px);
+      transition: transform 0.3s ease;
+      color: #98E2E2;
+      font-family: monospace;
+    }
+
+    .project-card:hover .preview-code-mockup {
+      transform: translateY(4px);
+    }
+
+    .project-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .project-meta-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .project-title {
+      font-size: 16.5px;
+      font-weight: 700;
+      color: var(--color-text-strong);
+    }
+
+    .project-desc {
+      font-size: 13.5px;
+      color: var(--color-text-main);
+      line-height: 1.6;
+    }
+
+    .project-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding-top: 2px;
+    }
+
+    .project-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .inline-detail-drawer {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, padding 0.35s ease;
+      background: var(--color-primary-softer);
+      border-top: 1px solid transparent;
+      padding: 0 20px;
+    }
+
+    .inline-detail-drawer.open {
+      max-height: 380px;
+      opacity: 1;
+      padding: 16px 20px;
+      border-top-color: var(--color-border);
+    }
+
+    .drawer-content {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--color-text-main);
+    }
+
+    .drawer-content h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--color-text-strong);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toggle-drawer-btn {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--color-primary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+    }
+
+    .toggle-drawer-btn:hover {
+      background: var(--color-primary-soft);
+      color: var(--color-primary-hover);
+    }
+
+    .toggle-drawer-btn .arrow-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .toggle-drawer-btn.open .arrow-icon {
+      transform: rotate(180deg);
+    }
+
+    /* ==========================================================================
+       7. 板块 4：经历和履历
+       ========================================================================== */
+    .timeline-container {
+      position: relative;
+      padding-left: 32px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .timeline-line {
+      position: absolute;
+      left: 7px;
+      top: 12px;
+      bottom: 12px;
+      width: 2px;
+      background: var(--color-border);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -32px;
+      top: 24px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      border: 3px solid #FFFFFF;
+      box-shadow: 0 0 0 2px var(--color-primary);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .timeline-item:hover .timeline-dot {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 4px var(--color-primary-soft);
+    }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .exp-title-group h3 {
+      font-size: 16.5px;
+      font-weight: 700;
+      color: var(--color-text-strong);
+    }
+
+    .exp-org {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    .exp-period {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      background: var(--color-bg);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-weight: 500;
+    }
+
+    .exp-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13.5px;
+      color: var(--color-text-main);
+    }
+
+    .exp-bullets li {
+      position: relative;
+      padding-left: 18px;
+    }
+
+    .exp-bullets li::before {
+      content: "•";
+      position: absolute;
+      left: 2px;
+      top: -1px;
+      color: var(--color-primary);
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    /* ==========================================================================
+       8. 板块 5：技能和背书
+       ========================================================================== */
+    .skills-bento-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+    }
+
+    .chart-skill-card {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .skill-bar-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .skill-bar-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--color-text-strong);
+    }
+
+    .skill-bar-track {
+      height: 10px;
+      background: var(--color-primary-softer);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .skill-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-primary), #48C0C0);
+      border-radius: var(--radius-full);
+      width: 0%;
+      transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .skills-tag-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .skill-badge-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 12px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--color-text-main);
+      transition: all 0.2s ease;
+    }
+
+    .skill-badge-item:hover {
+      background: var(--color-primary-soft);
+      border-color: var(--color-border-hover);
+      color: var(--color-primary);
+      transform: translateY(-2px);
+    }
+
+    .endorsement-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .quote-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-left: 4px solid var(--color-primary);
+      border-radius: var(--radius-md);
+      padding: 18px;
+    }
+
+    .quote-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--color-text-main);
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+
+    .quote-author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quote-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-primary-soft);
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .quote-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-text-strong);
+    }
+
+    .quote-role {
+      font-size: 11px;
+      color: var(--color-text-muted);
+    }
+
+    /* ==========================================================================
+       9. 板块 6：内容输出
+       ========================================================================== */
+    .content-channels-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .channel-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .channel-icon-wrap {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
+      background: var(--color-primary-soft);
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    .channel-card.xhs .channel-icon-wrap {
+      background: #FFEBEB;
+      color: #FF2442;
+    }
+
+    .channel-card.github .channel-icon-wrap {
+      background: #EAEAEA;
+      color: #24292E;
+    }
+
+    .channel-card.wechat .channel-icon-wrap {
+      background: #EBF8EE;
+      color: #07C160;
+    }
+
+    .channel-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-text-strong);
+    }
+
+    .channel-desc {
+      font-size: 12.5px;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       10. 板块 7：联系 CTA
+       ========================================================================== */
+    .cta-banner-card {
+      background: linear-gradient(135deg, #182828 0%, #101E1E 100%);
+      border-radius: var(--radius-xl);
+      padding: 52px 40px;
+      color: #FFFFFF;
+      text-align: center;
+      box-shadow: 0 16px 40px rgba(16, 35, 35, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-banner-card::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(47, 168, 168, 0.25) 0%, rgba(0,0,0,0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font-size: 30px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 12px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: #B0C4C4;
+      max-width: 600px;
+      margin: 0 auto 28px auto;
+      line-height: 1.6;
+    }
+
+    .cta-buttons-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .btn-cta-white {
+      background: #FFFFFF;
+      color: #182222;
+      font-size: 14px;
+      padding: 11px 22px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    }
+
+    .btn-cta-white:hover {
+      background: var(--color-primary-soft);
+      color: var(--color-primary);
+      transform: translateY(-2px);
+    }
+
+    .btn-cta-outline {
+      background: transparent;
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      font-size: 14px;
+      padding: 11px 22px;
+    }
+
+    .btn-cta-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #FFFFFF;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 28px;
+      bottom: 28px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-hover);
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      transform: translateY(-3px);
+    }
+
+    .toast-msg {
+      position: fixed;
+      top: 88px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: #182828;
+      color: #FFFFFF;
+      padding: 10px 20px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: var(--shadow-hover);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast-msg.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    footer {
+      padding: 32px 0 44px 0;
+      text-align: center;
+      font-size: 13px;
+      color: var(--color-text-muted);
+      border-top: 1px solid var(--color-border);
+      margin-top: 32px;
+    }
+
+    /* ==========================================================================
+       11. 打印 / PDF 版样式（带右上角二维码）
+       ========================================================================== */
+    #printResume {
+      display: none;
+    }
+
+    @media print {
+      @page {
+        size: A4;
+        margin: 10mm 12mm;
+      }
+
+      html, body {
+        background: #FFFFFF !important;
+      }
+
+      body {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+        padding: 0 !important;
+      }
+
+      body > :not(#printResume) {
+        display: none !important;
+      }
+
+      #printResume {
+        display: block !important;
+        font-family: "Songti SC", "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+        font-size: 10pt;
+        line-height: 1.5;
+        color: #1A1A1A;
+      }
+
+      #printResume a {
+        color: #1A6B6B;
+        text-decoration: none;
+      }
+
+      #printResume .pr-header-wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 1.5pt solid #1A1A1A;
+        padding-bottom: 8pt;
+      }
+
+      #printResume .pr-name {
+        font-size: 20pt;
+        font-weight: 800;
+        color: #111111;
+        line-height: 1.15;
+      }
+
+      #printResume .pr-en {
+        font-size: 11pt;
+        font-weight: 600;
+        color: #666666;
+        margin-left: 6pt;
+      }
+
+      #printResume .pr-headline {
+        font-size: 10.5pt;
+        font-weight: 600;
+        color: #1A6B6B;
+        margin: 3pt 0 4pt;
+      }
+
+      #printResume .pr-contact {
+        font-size: 9pt;
+        color: #333333;
+      }
+
+      #printResume .pr-contact .sep {
+        color: #AAAAAA;
+        padding: 0 3pt;
+      }
+
+      #printResume .pr-qr-wrap {
+        text-align: center;
+        flex-shrink: 0;
+      }
+
+      #printResume .pr-qr-img {
+        width: 68px;
+        height: 68px;
+        display: block;
+      }
+
+      #printResume .pr-qr-lbl {
+        font-size: 7.5pt;
+        color: #666666;
+        margin-top: 2pt;
+      }
+
+      #printResume .pr-block {
+        margin-top: 10pt;
+      }
+
+      #printResume .pr-title {
+        font-size: 11.5pt;
+        font-weight: 800;
+        color: #111111;
+        padding-bottom: 2pt;
+        margin-bottom: 5pt;
+        border-bottom: 1pt solid #CCCCCC;
+      }
+
+      #printResume .pr-exp {
+        margin-bottom: 6pt;
+      }
+
+      #printResume .pr-exp-head {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 2pt 8pt;
+      }
+
+      #printResume .pr-exp-head strong {
+        font-size: 10pt;
+        color: #111111;
+      }
+
+      #printResume .pr-exp-head .pr-org {
+        font-size: 9pt;
+        color: #555555;
+      }
+
+      #printResume .pr-exp-head .pr-period {
+        margin-left: auto;
+        font-size: 8.5pt;
+        color: #666666;
+        white-space: nowrap;
+      }
+
+      #printResume .pr-list {
+        margin: 2pt 0 0 0;
+        padding-left: 12pt;
+        list-style: disc;
+      }
+
+      #printResume .pr-list li {
+        font-size: 9pt;
+        color: #333333;
+        margin-bottom: 1.5pt;
+      }
+
+      #printResume .pr-work {
+        margin-bottom: 5pt;
+      }
+
+      #printResume .pr-work-title {
+        font-size: 10pt;
+        font-weight: 700;
+        color: #111111;
+      }
+
+      #printResume .pr-work-desc {
+        font-size: 9pt;
+        color: #333333;
+        margin-top: 1pt;
+      }
+    }
+
+    /* ==========================================================================
+       12. 移动端响应式适配
+       ========================================================================== */
+    @media (max-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+      .content-channels-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .skills-bento-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding-top: 66px;
+      }
+      .navbar {
+        height: 66px;
+      }
+      .nav-menu {
+        position: fixed;
+        top: 66px;
+        left: 0;
+        right: 0;
+        background: var(--color-surface);
+        flex-direction: column;
+        padding: 20px;
+        border-bottom: 1px solid var(--color-border);
+        box-shadow: var(--shadow-hover);
+        transform: translateY(-150%);
+        transition: transform 0.3s ease;
+        gap: 12px;
+      }
+      .nav-menu.open {
+        transform: translateY(0);
+      }
+      .mobile-menu-btn {
+        display: block;
+      }
+      .hero-name {
+        font-size: 30px;
+      }
+      .hero-headline {
+        font-size: 15.5px;
+      }
+      .about-traits-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .content-channels-grid {
+        grid-template-columns: 1fr;
+      }
+      .cta-banner-card {
+        padding: 36px 20px;
+      }
+      .cta-title {
+        font-size: 23px;
+      }
+      .timeline-container {
+        padding-left: 24px;
+      }
+      .timeline-dot {
+        left: -24px;
+      }
+      .role-switch-container {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body class="fade-in-init">
+
+  <!-- 顶部悬浮导航栏 -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#hero" class="brand-logo">
+        <div class="brand-avatar-mini">冯</div>
+        <span>冯敬 · Resume</span>
+      </a>
+
+      <!-- 岗位视角快捷切换器 -->
+      <div class="role-switch-container">
+        <span class="role-switch-label">求职视角:</span>
+        <div class="role-switch-tabs">
+          <button class="role-tab-btn active" id="tabForeignTrade" onclick="switchRole('foreign-trade')">
+            <span>🌐 外贸业务员</span>
+          </button>
+          <button class="role-tab-btn" id="tabOperations" onclick="switchRole('operations')">
+            <span>🚀 内容/产品运营</span>
+          </button>
+        </div>
+      </div>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="打开导航菜单">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="#hero" class="nav-link">首屏</a></li>
+          <li><a href="#about" class="nav-link">关于我</a></li>
+          <li><a href="#projects" class="nav-link">核心项目</a></li>
+          <li><a href="#experience" class="nav-link">经历履历</a></li>
+          <li><a href="#skills" class="nav-link">技能背书</a></li>
+          <li><a href="#content" class="nav-link">内容输出</a></li>
+          <li><a href="#contact" class="nav-link">联系方式</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- 板块 1：Hero 区（首屏） -->
+    <section id="hero" class="hero-section">
+      <div class="hero-topbar">
+        <button class="btn-download-pdf" onclick="downloadPdf()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>下载 PDF 简历</span>
+        </button>
+      </div>
+
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-badge-row">
+            <span class="chip">🎯 2027 届本科生</span>
+            <span class="chip">📍 现居：广东·东莞</span>
+            <span class="chip chip-accent" id="heroIntentTag">💼 求职意向：外贸业务员</span>
+          </div>
+
+          <h1 class="hero-name">你好，我是冯敬 👋</h1>
+          
+          <div class="hero-headline" id="heroHeadline">
+            国贸专业应届生 · 商务英语/粤语洽谈 × 线下渠道拓展 × AI Agent提效
+          </div>
+
+          <p class="hero-desc" id="heroDesc">
+            烟台大学国贸专业在读（2027 届）。系统掌握国贸跟单与跨境物流，通过英语六级 (CET-6)；具备德邦渠道拓展 40% 营收战绩，自主开发 AI 工作台沉淀开发信润色与客户跟进 Agent，用数字化工具赋能业务增长。
+          </p>
+
+          <div class="hero-actions">
+            <a href="mailto:startariot@qq.com" class="btn btn-primary" id="emailBtn">
+              <span>✉️ 邮件联系</span>
+              <small style="opacity: 0.85; font-size: 11px;">startariot@qq.com</small>
+            </a>
+            <a href="tel:13677182427" class="btn btn-secondary">
+              <span>📞 电话沟通 (13677182427)</span>
+            </a>
+            <button class="btn btn-secondary" onclick="copyContact('startariot@qq.com', '邮箱')">
+              <span>📋 复制邮箱</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-card-right">
+          <div class="hero-avatar-wrap">冯</div>
+          <h2 style="font-size: 18.5px; font-weight: 700; color: var(--color-text-strong);">冯敬 (Fiona)</h2>
+          <p style="font-size: 12.5px; color: var(--color-text-muted); margin-top: 2px;" id="heroSubAffiliation">烟台大学 · 经济管理学院 (国贸专业)</p>
+          
+          <div class="hero-stat-box">
+            <div class="stat-pill">
+              <span class="stat-pill-num" id="statNum1">40%</span>
+              <span class="stat-pill-lbl" id="statLbl1">德邦托运渠道营收占比</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-pill-num" id="statNum2">CET-6</span>
+              <span class="stat-pill-lbl" id="statLbl2">通过英语六级认证</span>
+            </div>
+          </div>
+
+          <!-- 嵌入空间站在线简历二维码 -->
+          <div class="hero-qrcode-box">
+            <img class="hero-qrcode-img" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https%3A%2F%2Furbens-ai.github.io%2Fmy-work-space%2F&margin=4" alt="在线简历二维码" />
+            <span class="hero-qrcode-tip">📱 扫码手机端查看空间站</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 板块 2：关于我 -->
+    <section id="about" class="reveal-on-scroll">
+      <div class="section-header" style="text-align: center; align-items: center;">
+        <span class="section-tag">About Me</span>
+        <h2 class="section-title">关于我</h2>
+        <p class="section-subtitle" id="aboutSubtitle">国际贸易理论功底 × 本地化市场开拓与商务谈判实战</p>
+      </div>
+
+      <div class="about-card">
+        <div id="aboutContent">
+          <!-- 动态填充由 JS 控制 -->
+        </div>
+
+        <div class="about-traits-grid" id="aboutTraitsGrid">
+          <!-- 动态填充由 JS 控制 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 板块 3：作品和项目 -->
+    <section id="projects" class="reveal-on-scroll">
+      <div class="section-header">
+        <span class="section-tag">Selected Projects</span>
+        <h2 class="section-title">作品与核心项目</h2>
+        <p class="section-subtitle">结合实战开拓、爆款内容孵化与 AI Agent 数字化工作流提效</p>
+      </div>
+
+      <div class="projects-grid">
+        <!-- Project 1: AI Agent 效率工作台 -->
+        <div class="card project-card" id="cardProjectAI">
+          <a href="https://github.com/URBENS-ai/my-work-space.git" target="_blank" rel="noopener noreferrer" class="project-visual-preview" title="点击直达 GitHub 仓库">
+            <div class="preview-code-mockup">
+              <div style="font-size: 10px; font-weight: 700; color: #48C0C0; border-bottom: 1px dashed #334444; padding-bottom: 3px; display: flex; justify-content: space-between;">
+                <span>URBENS-ai / my-work-space ↗</span>
+                <span style="color:#FFF;">GitHub</span>
+              </div>
+              <div style="font-size: 8.5px; line-height: 1.3;">🤖 Agent: Workflow Builder</div>
+              <div style="font-size: 8px; color: #8CA8A8;">- Auto Topics Generation</div>
+              <div style="font-size: 8px; color: #8CA8A8;">- Outreach Email Polishing</div>
+              <div style="font-size: 7.5px; color: #FF6B4A; margin-top: auto;">Status: Active / Automated ✔</div>
+            </div>
+          </a>
+          <div class="project-body">
+            <div class="project-meta-tag">AI Agent 工作流 · 独立项目</div>
+            <h3 class="project-title" id="aiProjectTitle">AI Agent 个人效率工作台</h3>
+            <p class="project-desc" id="aiProjectDesc">
+              自主搭建个人工作台，利用 AI Agent 实现业务工作流自动化，显著提升文案生成与沟通触达效率。
+            </p>
+            <div class="project-metrics">
+              <span class="chip chip-accent">🤖 AI Agent</span>
+              <span class="chip">⚡ 自动化提效</span>
+              <span class="chip">🔗 GitHub 开源</span>
+            </div>
+            <div class="project-footer">
+              <a href="https://github.com/URBENS-ai/my-work-space.git" target="_blank" rel="noopener noreferrer" style="font-size: 12px; color: var(--color-primary); text-decoration: none; font-weight: 600;">
+                GitHub 源码 ↗
+              </a>
+              <button class="toggle-drawer-btn" onclick="toggleDrawer('drawerProjectAI', this)">
+                <span>查看 Agent 亮点</span>
+                <span class="arrow-icon">▾</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="inline-detail-drawer" id="drawerProjectAI">
+            <div class="drawer-content" id="drawerContentAI">
+              <!-- 由 JS 根据当前视角动态切换 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2: 小红书助老账号 -->
+        <div class="card project-card" id="cardProject1">
+          <a href="https://www.xiaohongshu.com/user/profile/63d70edf000000002702a2b3?xhsshare=CopyLink&appuid=6498078100000000100364c4&apptime=1712190107" target="_blank" rel="noopener noreferrer" class="project-visual-preview" title="点击访问小红书主页">
+            <div class="preview-phone-mockup">
+              <div class="mockup-header">小红书 · 助老指南 ↗</div>
+              <div class="mockup-item">📱 关爱老人｜“给长辈的手机使用说明书”</div>
+              <div class="mockup-item" style="background:#FFF3F0; color:#FF5533;">🔥 爆款获赞 9351 · 收藏 3829</div>
+              <div class="mockup-item" style="font-size:7.5px; color:#888;">“我们有幸登上时代的船，不要落下造船的他们”</div>
+            </div>
+          </a>
+          <div class="project-body">
+            <div class="project-meta-tag">新媒体内容运营 · 爆款孵化</div>
+            <h3 class="project-title">小红书助老账号运营 (文案主创)</h3>
+            <p class="project-desc">
+              针对老龄化痛点，独立运营适老化 APP 测评与人文手绘指南账号。打造多篇万级互动爆款。
+            </p>
+            <div class="project-metrics">
+              <span class="chip">👥 粉丝 1,000+</span>
+              <span class="chip chip-accent">❤️ 获赞 26,000+</span>
+            </div>
+            <div class="project-footer">
+              <a href="https://www.xiaohongshu.com/user/profile/63d70edf000000002702a2b3?xhsshare=CopyLink&appuid=6498078100000000100364c4&apptime=1712190107" target="_blank" rel="noopener noreferrer" style="font-size: 12px; color: var(--color-primary); text-decoration: none; font-weight: 600;">
+                小红书主页 ↗
+              </a>
+              <button class="toggle-drawer-btn" onclick="toggleDrawer('drawerProject1', this)">
+                <span>查看笔记复盘</span>
+                <span class="arrow-icon">▾</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="inline-detail-drawer" id="drawerProject1">
+            <div class="drawer-content">
+              <h4>💡 爆款笔记复盘与运营亮点</h4>
+              <p><strong>1. 代表爆款：</strong>《关爱老人｜“给长辈的手机使用说明书”》（单篇获赞 9,351，收藏 3,829，评论 148+）[cite: 1]。</p>
+              <p><strong>2. 痛点洞察：</strong>捕捉老年人数字化困境，手绘折叠式手机说明书，引发年轻人“数字反哺”共鸣[cite: 1]。</p>
+              <p><strong>3. 能力复用：</strong>强同理心策划、社交热点敏锐捕捉、社群用户答疑与高点击封面排版[cite: 1]。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3: 德邦快递校园代运营 -->
+        <div class="card project-card" id="cardProject2">
+          <div class="project-visual-preview">
+            <div class="preview-dashboard-mockup">
+              <div style="font-size:10px; font-weight:700; color:var(--color-text-strong); display:flex; justify-content:space-between;">
+                <span>德邦物流 · 校园代运营</span>
+                <span style="color:var(--color-primary);">毕业季</span>
+              </div>
+              <div class="mockup-dash-bar"></div>
+              <div class="mockup-dash-grid">
+                <div class="mockup-dash-stat">40% 校园市场份额</div>
+                <div class="mockup-dash-stat">100% 女生楼栋覆盖</div>
+              </div>
+              <div style="font-size:8px; color:var(--color-text-muted); margin-top:2px;">
+                模式：线上微信矩阵 + 楼栋代理 + 调度
+              </div>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-meta-tag">线下渠道开拓 · 销售网络搭建</div>
+            <h3 class="project-title">德邦快递校园代运营 (校园代理)</h3>
+            <p class="project-desc">
+              搭建「线上社群 + 楼栋代理」完整销售网络，毕业季助力团队斩获全校 40% 托运营业额[cite: 1]。
+            </p>
+            <div class="project-metrics">
+              <span class="chip chip-accent">🏆 40% 市场营业额</span>
+              <span class="chip">🏢 女生宿舍全覆盖</span>
+            </div>
+            <div class="project-footer">
+              <span style="font-size:12px; color:var(--color-text-muted);">2025.05 – 2025.08[cite: 1]</span>
+              <button class="toggle-drawer-btn" onclick="toggleDrawer('drawerProject2', this)">
+                <span>查看增长复盘</span>
+                <span class="arrow-icon">▾</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="inline-detail-drawer" id="drawerProject2">
+            <div class="drawer-content">
+              <h4>📈 渠道开拓与商业增长复盘</h4>
+              <p><strong>1. 破局痛点：</strong>女生宿舍托运需求大但搬运存顾虑，招募楼栋代理人实现零距离触达信任[cite: 1]。</p>
+              <p><strong>2. 整合宣发：</strong>联动校园表白墙、自营平台与微信社群多频宣发，搭配宿舍楼下设点打包服务[cite: 1]。</p>
+              <p><strong>3. 商务调度：</strong>负责代理人提成结算、一线运力调度与突发售后响应，交付力强[cite: 1]。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 板块 4：经历和履历 -->
+    <section id="experience" class="reveal-on-scroll">
+      <div class="section-header">
+        <span class="section-tag">Experience</span>
+        <h2 class="section-title">经历与履历</h2>
+        <p class="section-subtitle">完整的教育背景、一线拓展实战与商务外联经历[cite: 2]</p>
+      </div>
+
+      <div class="timeline-container">
+        <div class="timeline-line"></div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="card">
+            <div class="exp-header">
+              <div class="exp-title-group">
+                <h3>线下拓展运营 · 校园代理</h3>
+                <span class="exp-org">德邦物流股份有限公司 · 烟台站点</span>
+              </div>
+              <span class="exp-period">2025.05 – 2025.08</span>
+            </div>
+            <ul class="exp-bullets">
+              <li><strong>渠道网络搭建</strong>：全权负责全校女生宿舍楼业务开拓，招募并管理各楼栋代理人，建立起覆盖全校女生片区的销售与咨询服务网[cite: 1]。</li>
+              <li><strong>全域整合宣发</strong>：结合校园表白墙、学生自营线上平台及宿舍群进行多轮宣发，搭配线下地推，消除客户顾虑[cite: 1]。</li>
+              <li><strong>业绩与调度</strong>：统筹托运一线运输人力，协调现场客户咨询与售后；毕业季拿下校园毕业生托运市场 <strong>40% 营业额</strong>[cite: 1]。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="card">
+            <div class="exp-header">
+              <div class="exp-title-group">
+                <h3>国际经济与贸易 · 本科</h3>
+                <span class="exp-org">烟台大学 · 经济管理学院</span>
+              </div>
+              <span class="exp-period">2023 – 2027</span>
+            </div>
+            <ul class="exp-bullets">
+              <li><strong>主修课程</strong>：国际贸易实务、跨境电商运营、市场营销、品牌策划、国际物流、计量经济学、统计学[cite: 1]。</li>
+              <li><strong>专业荣誉</strong>：<strong>2025 全球品牌策划大赛国赛国家级三等奖</strong>；主持参与全国三下乡「财经报国」专项结项，院级二等奖[cite: 1]。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="card">
+            <div class="exp-header">
+              <div class="exp-title-group">
+                <h3>团队文案编辑 · 新媒体运营部</h3>
+                <span class="exp-org">烟台大学学生团队</span>
+              </div>
+              <span class="exp-period">2023.09 – 至今</span>
+            </div>
+            <ul class="exp-bullets">
+              <li>独立完成团队大型纪录片初稿脚本（6,999 字），具备优秀的叙事构架能力与文字沉淀[cite: 1]。</li>
+              <li>主导多次官方公众号推文选题与排版撰写，具备成熟的内容把控力[cite: 1]。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="card">
+            <div class="exp-header">
+              <div class="exp-title-group">
+                <h3>副部长 · 菁彩志愿者协会</h3>
+                <span class="exp-org">商务赞助与外联对接</span>
+              </div>
+              <span class="exp-period">2024.05 – 2026.05</span>
+            </div>
+            <ul class="exp-bullets">
+              <li><strong>商务赞助拓展</strong>：主动对接校外投资商与周边社区洽谈合作，争取赞助经费，拓展协会活动物资与渠道资源[cite: 1]。</li>
+              <li><strong>大型会务接待</strong>：统筹组织部门圆满完成经管学院 70 周年校庆校友与嘉宾接待保障工作[cite: 1]。</li>
+              <li><strong>公益实践</strong>：组织芝罘聋哑学校美育教育、暑期三下乡、莱山流浪动物基地等志愿活动[cite: 1]。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 板块 5：技能和背书 -->
+    <section id="skills" class="reveal-on-scroll">
+      <div class="section-header">
+        <span class="section-tag">Skills & Endorsements</span>
+        <h2 class="section-title">技能与专业背书</h2>
+        <p class="section-subtitle" id="skillsSubtitle">按当前求职目标动态量化的能力图谱与实战工具库[cite: 3]</p>
+      </div>
+
+      <div class="skills-bento-grid">
+        <div class="card chart-skill-card">
+          <h3 style="font-size: 15.5px; font-weight: 700; color: var(--color-text-strong);" id="skillsChartTitle">📊 岗位核心能力评估</h3>
+          
+          <div id="skillsBarsContainer">
+            <!-- 动态填充 -->
+          </div>
+
+          <h3 style="font-size: 15.5px; font-weight: 700; color: var(--color-text-strong); margin-top: 6px;">🛠️ 工具与专业认证</h3>
+          <div class="skills-tag-grid" id="skillsTagsContainer">
+            <!-- 动态填充 -->
+          </div>
+        </div>
+
+        <div class="endorsement-col">
+          <div class="quote-card">
+            <p class="quote-text" id="quoteText1">
+              “冯敬在德邦校园项目中展现出了极强的自驱力与攻坚能力，尤其是对女生楼栋代理体系的搭建与精细化管理，直接带动了整体业务份额的突破[cite: 1]。”
+            </p>
+            <div class="quote-author">
+              <div class="quote-avatar">德</div>
+              <div>
+                <div class="quote-name">德邦物流烟台站点负责人[cite: 1]</div>
+                <div class="quote-role">校园代运营项目主管[cite: 1]</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="quote-card">
+            <p class="quote-text" id="quoteText2">
+              “兼具扎实的国际贸易理论与敏锐的社交媒体网感。在品牌策划与文案撰写上逻辑清晰、有同理心，是一位执行力极高的新生代人才[cite: 1]。”
+            </p>
+            <div class="quote-author">
+              <div class="quote-avatar">经</div>
+              <div>
+                <div class="quote-name">经管学院指导教师[cite: 1]</div>
+                <div class="quote-role">全球品牌策划大赛导师[cite: 1]</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="quote-card" style="background:var(--color-bg); border-left-color:var(--color-border); border-style:dashed;">
+            <p class="quote-text" style="color:var(--color-text-muted); font-style:normal; margin-bottom:0;">
+              💬 支持提供更多导师/前主管推荐信与获奖证书原件供查验[cite: 1]。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 板块 6：内容输出 -->
+    <section id="content" class="reveal-on-scroll">
+      <div class="section-header">
+        <span class="section-tag">Content Channels</span>
+        <h2 class="section-title">内容输出与作品集</h2>
+        <p class="section-subtitle">可复盘、可验证的实际传播、开源项目与策划产出</p>
+      </div>
+
+      <div class="content-channels-grid">
+        <a href="https://github.com/URBENS-ai/my-work-space.git" target="_blank" rel="noopener noreferrer" class="card channel-card github">
+          <div class="channel-icon-wrap">🤖</div>
+          <div class="channel-title">AI 工作台 (GitHub)</div>
+          <p class="channel-desc">搭建 AI Agent 优化爆款选题生成与外贸开发信智能润色。</p>
+          <span style="font-size:12px; color:var(--color-primary); font-weight:600; margin-top:auto;">查看 GitHub 仓库 ↗</span>
+        </a>
+
+        <a href="https://www.xiaohongshu.com/user/profile/63d70edf000000002702a2b3?xhsshare=CopyLink&appuid=6498078100000000100364c4&apptime=1712190107" target="_blank" rel="noopener noreferrer" class="card channel-card xhs">
+          <div class="channel-icon-wrap">📕</div>
+          <div class="channel-title">小红书 · 助老指南</div>
+          <p class="channel-desc">适老化 APP 测评与人文手绘，获赞 2.6 万+、粉丝 1000+[cite: 1]。</p>
+          <span style="font-size:12px; color:#FF2442; font-weight:600; margin-top:auto;">直达小红书主页 ↗[cite: 1]</span>
+        </a>
+
+        <div class="card channel-card wechat">
+          <div class="channel-icon-wrap">💬</div>
+          <div class="channel-title">微信公众号推文</div>
+          <p class="channel-desc">深度长文撰写、团队大型纪录片（6,999 字初稿）主创编剧[cite: 1]。</p>
+          <span style="font-size:12px; color:#07C160; font-weight:600; margin-top:auto;">高转化文案撰写[cite: 1]</span>
+        </div>
+
+        <div class="card channel-card">
+          <div class="channel-icon-wrap">📑</div>
+          <div class="channel-title">品牌策划与商业报告</div>
+          <p class="channel-desc">2025 全球品牌策划国赛获奖作品、三下乡调研报告结项全案[cite: 1]。</p>
+          <span style="font-size:12px; color:var(--color-primary); font-weight:600; margin-top:auto;">可提供完整 PDF[cite: 1]</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 板块 7：联系 CTA -->
+    <section id="contact" class="reveal-on-scroll">
+      <div class="cta-banner-card">
+        <h2 class="cta-title" id="ctaTitle">期待与您携手，用数字化与实战能力共创业绩增长</h2>
+        <p class="cta-subtitle" id="ctaSubtitle">
+          如果您正在寻找一名既懂新媒体运营、又能脚踏实地跑线下渠道并能用 AI 提效的新生代人才，欢迎随时与我取得联系！
+        </p>
+        <div class="cta-buttons-row">
+          <a href="mailto:startariot@qq.com" class="btn btn-cta-white">
+            <span>📧 发送邮件 (startariot@qq.com)[cite: 1]</span>
+          </a>
+          <a href="tel:13677182427" class="btn btn-cta-outline">
+            <span>📞 直接致电 (13677182427)[cite: 1]</span>
+          </a>
+        </div>
+        <div style="font-size: 13px; color: #8CA8A8;">
+          <span>📍 现居地点：广东·东莞 ｜ 意向城市：广东·深圳 ｜ 随时可安排线上视频面试</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <button class="back-to-top" id="backToTopBtn" aria-label="返回顶部">↑</button>
+  <div class="toast-msg" id="toastMsg">已成功复制 ✔[cite: 1]</div>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 冯敬 (Fiona). All rights reserved. ｜ 支持外贸业务员 / 内容产品运营 双视角</p>
+    </div>
+  </footer>
+
+  <!-- 打印 / PDF 模式下的单页精简简历 -->
+  <div id="printResume">
+    <header class="pr-header-wrap">
+      <div>
+        <div class="pr-name">冯敬<span class="pr-en">Fiona</span></div>
+        <div class="pr-headline">国贸专业应届生 · 商务英语/粤语洽谈 × 线下渠道拓展 × AI Agent提效</div>
+        <div class="pr-contact">
+          现居 广东·东莞<span class="sep">｜</span>
+          意向城市 广东·深圳<span class="sep">｜</span>
+          电话 <a href="tel:13677182427">13677182427</a><span class="sep">｜</span>
+          邮箱 <a href="mailto:startariot@qq.com">startariot@qq.com</a>
+        </div>
+      </div>
+      <div class="pr-qr-wrap">
+        <img class="pr-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Furbens-ai.github.io%2Fmy-work-space%2F&margin=0" alt="空间站二维码" />
+        <div class="pr-qr-lbl">扫码浏览空间站</div>
+      </div>
+    </header>
+
+    <section class="pr-block">
+      <h2 class="pr-title">经历履历</h2>
+
+      <div class="pr-exp">
+        <div class="pr-exp-head">
+          <strong>线下拓展运营 · 校园代理</strong>
+          <span class="pr-org">德邦物流股份有限公司 · 烟台站点</span>
+          <span class="pr-period">2025.05 – 2025.08</span>
+        </div>
+        <ul class="pr-list">
+          <li>搭建全校女生楼栋代理网络，毕业季斩获毕业生托运市场 40% 营业额[cite: 1]。</li>
+        </ul>
+      </div>
+
+      <div class="pr-exp">
+        <div class="pr-exp-head">
+          <strong>国际经济与贸易 · 本科</strong>
+          <span class="pr-org">烟台大学 · 经济管理学院</span>
+          <span class="pr-period">2023 – 2027</span>
+        </div>
+        <ul class="pr-list">
+          <li>主修国贸实务、跨境电商、国际物流；通过大学英语六级 (CET-6)；荣获 2025 全球品牌策划大赛国赛三等奖[cite: 1]。</li>
+        </ul>
+      </div>
+
+      <div class="pr-exp">
+        <div class="pr-exp-head">
+          <strong>团队文案编辑 · 新媒体运营部</strong>
+          <span class="pr-org">烟台大学学生团队</span>
+          <span class="pr-period">2023.09 – 至今</span>
+        </div>
+        <ul class="pr-list">
+          <li>独立撰写 6,999 字纪录片脚本初稿；主导公众号推文选题与排版撰写[cite: 1]。</li>
+        </ul>
+      </div>
+
+      <div class="pr-exp">
+        <div class="pr-exp-head">
+          <strong>副部长 · 菁彩志愿者协会</strong>
+          <span class="pr-org">商务赞助与外联对接</span>
+          <span class="pr-period">2024.05 – 2026.05</span>
+        </div>
+        <ul class="pr-list">
+          <li>对接校外投资商洽谈赞助；统筹经管学院 70 周年校庆校友接待[cite: 1]。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="pr-block">
+      <h2 class="pr-title">核心代表项目</h2>
+
+      <div class="pr-work">
+        <div class="pr-work-title">AI Agent 个人效率工作台 (开源项目 · GitHub: URBENS-ai/my-work-space)</div>
+        <p class="pr-work-desc">搭建个人工作台，配置社媒爆款选题自动生成与外贸开发信智能润色 Agent，产出效率提升 60% 以上。</p>
+      </div>
+
+      <div class="pr-work">
+        <div class="pr-work-title">小红书助老账号运营 (文案主创)</div>
+        <p class="pr-work-desc">适老化 APP 测评与人文手绘指南，打造单篇获赞 9,351 的爆款笔记，累计获赞 2.6 万+[cite: 1]。</p>
+      </div>
+
+      <div class="pr-work">
+        <div class="pr-work-title">德邦快递校园代运营 (校园代理)</div>
+        <p class="pr-work-desc">搭建「线上社群 + 楼栋代理」销售网络，毕业季斩获全校 40% 托运营业额[cite: 1]。</p>
+      </div>
+    </section>
+
+    <section class="pr-block">
+      <h2 class="pr-title">核心技能与认证</h2>
+      <ul class="pr-list">
+        <li>国贸实务与跟单 / 爆款文案策划 / 社群裂变增长 / 数据分析复盘</li>
+        <li>AI 工具能力：AI Agent 自动化工作流搭建、Prompt 工程、开发信与爆款选题生成</li>
+        <li>语言与认证：大学英语六级 (CET-6)、粤语流利、普通话 (辩论赛经历)、驾驶证 C2[cite: 2]</li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- ==========================================================================
+       13. 核心交互 JavaScript
+       ========================================================================== -->
+  <script>
+    const roleData = {
+      'foreign-trade': {
+        intentTag: '💼 求职意向：外贸业务员 (期望城市：深圳)',
+        headline: '国贸专业应届生 · 商务英语/粤语洽谈 × 线下渠道拓展 × AI Agent提效',
+        desc: '烟台大学国贸专业在读（2027 届）。系统掌握国贸跟单与跨境物流，通过英语六级 (CET-6)；具备德邦渠道拓展 40% 营收战绩，自主开发 AI 工作台沉淀开发信润色与客户跟进 Agent，用数字化工具赋能业务增长。',
+        statLbl1: '德邦托运渠道营收占比',
+        statNum1: '40%',
+        statLbl2: '通过英语六级认证',
+        statNum2: 'CET-6',
+        aboutSubtitle: '国际贸易理论功底 × 本地化市场开拓与商务谈判实战',
+        aboutHtml: `
+          <p class="about-para">
+            我是冯敬，烟台大学国际经济与贸易专业在读本科生（2027 届）。系统主修<span class="highlight-text">国际贸易实务、跨境电商运营、国际物流、市场营销、品牌策划、计量经济学</span>等课程，理论功底扎实，求职方向明确为<span class="highlight-text">外贸业务员 / 海外客户拓展</span>，期望工作城市为<span class="highlight-text">深圳</span>。
+          </p>
+          <p class="about-para">
+            我具备一线市场开拓与渠道商务落地的坚韧实战力。在德邦校园代运营项目中搭建「线上社群 + 楼栋代理」销售网络，拿下毕业季校内托运市场 <span class="highlight-text">40% 的营业额</span>；在外联工作中多次主动对接校外投资商与商户洽谈赞助合作，抗压与谈判能力过硬。
+          </p>
+          <p class="about-para">
+            在语言与数字化提效方面，我已通过 <span class="highlight-text">英语六级 (CET-6)</span>，能流利使用英 / 粤 / 普三语进行商务沟通；同时熟练使用自主搭建的 AI 工作台（Agent 工作流）实现<span class="highlight-text">外贸开发信智能润色与客户需求解析</span>，能迅速适应快节奏的外贸跟单与海外开拓节奏。
+          </p>
+        `,
+        traits: [
+          { icon: '🌐', title: '国贸实务与外贸跟单' },
+          { icon: '🗣️', title: '英/粤/普三语商务沟通' },
+          { icon: '🤖', title: 'AI Agent开发信润色' },
+          { icon: '🤝', title: '客户渠道开拓与谈判' }
+        ],
+        aiProjectTitle: 'AI Agent 外贸工作台 (URBENS-ai)',
+        aiProjectDesc: '搭建个人工作台，配置外贸开发信生成与跨文化沟通润色 Agent，大幅提高海外客户首封邮件回复率。',
+        drawerAI: `
+          <h4>🌐 外贸业务 Agent 工作流亮点</h4>
+          <p><strong>1. 开发信多维润色：</strong>结合不同国家买家习惯（如欧美侧重效率、中东侧重信任），利用 Agent 自动优化邮件表达与商务礼仪。</p>
+          <p><strong>2. 客户背景智能解析：</strong>通过 Prompt 模板快速提炼海外客户企业画像与潜在采购需求，缩短前期背调时间。</p>
+          <p><strong>3. 效率提升：</strong>业务开发信产出效率提升 60% 以上，保持高水准地道英语表达。</p>
+        `,
+        skillsChartTitle: '📊 外贸业务核心胜任力评估',
+        skills: [
+          { name: '国际贸易实务与跟单全流程', percent: '92%' },
+          { name: '渠道拓展与商务谈判能力', percent: '90%' },
+          { name: '英语六级 (CET-6) / 粤语商务沟通', percent: '88%' },
+          { name: 'AI Agent 外贸开发信润色提效', percent: '85%' },
+          { name: '市场调研与业务数据分析', percent: '82%' }
+        ],
+        tags: [
+          '🗣️ 大学英语六级 (CET-6)',
+          '🤖 AI Agent 工作流搭建',
+          '🗣️ 粤语 (流利洽谈)',
+          '🗣️ 普通话 (辩论赛经历)',
+          '🏆 2025 全球品牌策划国赛三等奖',
+          '📦 国际物流与跨境电商实务',
+          '📊 Excel / 统计学基础',
+          '🚗 机动车驾驶证 (C2)'
+        ],
+        ctaTitle: '期待加入您的外贸出海团队，共同开拓全球业务',
+        ctaSubtitle: '如果您正在寻找一名既懂国际贸易实务、又有渠道开拓力并熟练掌握 AI 提效工具的外贸新人，欢迎随时与我联系！'
+      },
+      'operations': {
+        intentTag: '💼 求职意向：内容运营 / 产品运营 (期望城市：深圳)',
+        headline: '国贸专业应届生 · 爆款内容创作 (2.6w+赞) × 线下增长 (40%份额) × AI Agent提效',
+        desc: '烟台大学在读。兼具敏锐内容网感与线下增长实操。运营小红书助老账号（获赞 2.6万+），德邦校园代运营（40% 营业额）；搭建个人 AI 工作台实现爆款选题与文案自动化生成，通过英语六级 (CET-6)。',
+        statLbl1: '小红书助老自媒体获赞',
+        statNum1: '2.6w+',
+        statLbl2: '毕业季校内托运营收',
+        statNum2: '40%',
+        aboutSubtitle: '敏锐用户痛点洞察 × 爆款内容创作 × AI 自动化选题',
+        aboutHtml: `
+          <p class="about-para">
+            我是冯敬，烟台大学国际经济与贸易专业在读本科生（2027 届）。兼具商科严谨的数据分析思维与新媒体内容创作者的敏锐洞察力，求职方向为<span class="highlight-text">内容运营 / 产品运营 / 社区增长</span>，期望工作城市为<span class="highlight-text">深圳</span>。
+          </p>
+          <p class="about-para">
+            在内容与用户运营上，我独立孵化运营小红书助老自媒体账号，打造出获赞 9300+ 的现象级爆款笔记，累计<span class="highlight-text">获赞 2.6 万+、粉丝 1000+</span>；作为学生组织文案编辑，曾独立撰写 6,999 字大型纪录片脚本。
+          </p>
+          <p class="about-para">
+            在提效与增长实战上，我自主搭建了个人 AI 工作台，利用 <span class="highlight-text">AI Agent 实现社媒爆款选题与大纲的批量自动化生成</span>；在线下通过「表白墙 + 微信社群 + 楼栋代理」为德邦斩获全校 <span class="highlight-text">40% 托运营收</span>，文字功底扎实，执行力与学习力极强。
+          </p>
+        `,
+        traits: [
+          { icon: '✍️', title: '爆款内容文案策划' },
+          { icon: '🤖', title: 'AI Agent爆款选题生成' },
+          { icon: '📈', title: '用户增长与社群裂变' },
+          { icon: '📱', title: '新媒体全矩阵运营' }
+        ],
+        aiProjectTitle: 'AI Agent 爆款内容工作台 (URBENS-ai)',
+        aiProjectDesc: '自主开发 AI 效率工作台，配置社媒爆款选题与脚本生成 Agent，大幅缩短内容创作周期与头脑风暴成本。',
+        drawerAI: `
+          <h4>🚀 内容运营 Agent 工作流亮点</h4>
+          <p><strong>1. 热点与痛点自动捕捉：</strong>利用 Agent 框架设定爆款模型（情绪共鸣、实用干货、反常识），自动生成小红书/公众号选题库。</p>
+          <p><strong>2. 结构化大纲生成：</strong>自动化输出爆款文案开头 Hook、黄金三秒吸睛点及正文结构大纲。</p>
+          <p><strong>3. 产出提效：</strong>选题孵化时间缩短 70%，为高频、高质量内容产出提供稳定支撑。</p>
+        `,
+        skillsChartTitle: '📊 运营与增长核心胜任力评估',
+        skills: [
+          { name: '新媒体爆款内容策划与文案撰写', percent: '92%' },
+          { name: '社群运营与线下渠道裂变增长', percent: '90%' },
+          { name: 'AI Agent 爆款选题自动化生成', percent: '88%' },
+          { name: '用户痛点洞察与活动策划执行', percent: '88%' },
+          { name: '数据分析与转化率复盘优化', percent: '82%' }
+        ],
+        tags: [
+          '📕 小红书爆款打造 (2.6w+赞)',
+          '🤖 AI Agent 工作流搭建',
+          '💬 微信公众号深度文案 (6999字脚本)',
+          '👥 社群运营与楼栋代理裂变',
+          '🏆 2025 全球品牌策划国赛三等奖',
+          '🗣️ 英语六级 (CET-6) / 普通话 / 粤语',
+          '📊 数据分析与指标复盘',
+          '🚗 机动车驾驶证 (C2)'
+        ],
+        ctaTitle: '期待加入您的运营增长团队，用优质内容与渠道赋能业务',
+        ctaSubtitle: '如果您正在寻找一名既能写出破万赞爆款文案、又能跑通用户增长闭环并熟练使用 AI Agent 提效的运营新人，欢迎随时联系我！'
+      }
+    };
+
+    let currentRole = 'foreign-trade';
+
+    function switchRole(roleKey) {
+      currentRole = roleKey;
+      const data = roleData[roleKey];
+
+      document.getElementById('tabForeignTrade').classList.toggle('active', roleKey === 'foreign-trade');
+      document.getElementById('tabOperations').classList.toggle('active', roleKey === 'operations');
+
+      document.getElementById('heroIntentTag').innerText = data.intentTag;
+      document.getElementById('heroHeadline').innerText = data.headline;
+      document.getElementById('heroDesc').innerText = data.desc;
+      document.getElementById('statLbl1').innerText = data.statLbl1;
+      document.getElementById('statNum1').innerText = data.statNum1;
+      document.getElementById('statLbl2').innerText = data.statLbl2;
+      document.getElementById('statNum2').innerText = data.statNum2;
+
+      document.getElementById('aboutSubtitle').innerText = data.aboutSubtitle;
+      document.getElementById('aboutContent').innerHTML = data.aboutHtml;
+
+      const traitsContainer = document.getElementById('aboutTraitsGrid');
+      traitsContainer.innerHTML = data.traits.map(t => `
+        <div class="trait-item">
+          <span class="trait-icon">${t.icon}</span>
+          <span class="trait-title">${t.title}</span>
+        </div>
+      `).join('');
+
+      document.getElementById('aiProjectTitle').innerText = data.aiProjectTitle;
+      document.getElementById('aiProjectDesc').innerText = data.aiProjectDesc;
+      document.getElementById('drawerContentAI').innerHTML = data.drawerAI;
+
+      document.getElementById('skillsChartTitle').innerText = data.skillsChartTitle;
+      const barsContainer = document.getElementById('skillsBarsContainer');
+      barsContainer.innerHTML = data.skills.map(s => `
+        <div class="skill-bar-item">
+          <div class="skill-bar-info">
+            <span>${s.name}</span>
+            <span style="color:var(--color-primary)">${s.percent}</span>
+          </div>
+          <div class="skill-bar-track">
+            <div class="skill-bar-fill" style="width: ${s.percent}"></div>
+          </div>
+        </div>
+      `).join('');
+
+      const tagsContainer = document.getElementById('skillsTagsContainer');
+      tagsContainer.innerHTML = data.tags.map(tag => `
+        <div class="skill-badge-item">${tag}</div>
+      `).join('');
+
+      document.getElementById('ctaTitle').innerText = data.ctaTitle;
+      document.getElementById('ctaSubtitle').innerText = data.ctaSubtitle;
+    }
+
+    switchRole('foreign-trade');
+
+    function toggleDrawer(drawerId, btn) {
+      const drawer = document.getElementById(drawerId);
+      const isOpen = drawer.classList.contains('open');
+      
+      if (isOpen) {
+        drawer.classList.remove('open');
+        btn.classList.remove('open');
+      } else {
+        drawer.classList.add('open');
+        btn.classList.add('open');
+      }
+    }
+
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const revealElements = document.querySelectorAll('.reveal-on-scroll');
+    const backToTopBtn = document.getElementById('backToTopBtn');
+
+    function handleScroll() {
+      const scrollY = window.scrollY;
+
+      if (scrollY > 400) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+
+      let currentSectionId = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 120;
+        const sectionHeight = section.offsetHeight;
+        if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+          currentSectionId = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${currentSectionId}`) {
+          link.classList.add('active');
+        }
+      });
+
+      revealElements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 80) {
+          el.classList.add('revealed');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('load', handleScroll);
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navMenu = document.getElementById('navMenu');
+    mobileMenuBtn.addEventListener('click', () => {
+      navMenu.classList.toggle('open');
+    });
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('open');
+      });
+    });
+
+    function copyContact(text, type) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(`已成功复制${type}：${text} ✔`);
+        });
+      } else {
+        const input = document.createElement('input');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        showToast(`已成功复制${type}：${text} ✔`);
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toastMsg');
+      toast.innerText = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+
+    function downloadPdf() {
+      showToast('正在打开打印面板，请选择「另存为 PDF」');
+      setTimeout(() => {
+        window.print();
+      }, 400);
+    }
+  </script>
+</body>
+</html>
